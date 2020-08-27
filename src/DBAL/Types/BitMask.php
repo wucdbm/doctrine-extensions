@@ -22,7 +22,7 @@ namespace Wucdbm\DoctrineExtensions\DBAL\Types;
  * $a << $b   Shift left           Shift the bits of $a $b steps to the left (each step means "multiply by two")
  * $a >> $b   Shift right          Shift the bits of $a $b steps to the right (each step means "divide by two").
  */
-class BitMask {
+abstract class BitMask {
 
     protected const FLAG_NONE = 0;
 
@@ -62,6 +62,16 @@ class BitMask {
      */
     protected function toggle(int $bits): self {
         $this->bits ^= $bits;
+
+        return $this;
+    }
+
+    protected function flip(int $bits, bool $setOrUnset): self {
+        if ($setOrUnset) {
+            $this->set($bits);
+        } else {
+            $this->unset($bits);
+        }
 
         return $this;
     }
