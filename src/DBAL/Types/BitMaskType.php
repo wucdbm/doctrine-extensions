@@ -27,9 +27,12 @@ use Doctrine\DBAL\Types\Type;
  */
 abstract class BitMaskType extends Type {
 
-    const TYPE_INT = 'INT';
-    const TYPE_BIGINT = 'BIGINT';
+    // up to 65535
     const TYPE_SMALLINT = 'SMALLINT';
+    // up to 4294967295
+    const TYPE_INT = 'INT';
+    // up to 2^64-1
+    const TYPE_BIGINT = 'BIGINT';
 
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
         $this->validateValueClass();
@@ -46,15 +49,12 @@ abstract class BitMaskType extends Type {
 
         if (isset($fieldDeclaration['fieldType'])) {
             switch ($fieldDeclaration['fieldType']) {
-                case self::TYPE_INT:
-                    $platform->getIntegerTypeDeclarationSQL($fieldDeclaration);
-                    break;
-                case self::TYPE_BIGINT:
-                    $platform->getBigIntTypeDeclarationSQL($fieldDeclaration);
-                    break;
                 case self::TYPE_SMALLINT:
-                    $platform->getSmallIntTypeDeclarationSQL($fieldDeclaration);
-                    break;
+                    return $platform->getSmallIntTypeDeclarationSQL($fieldDeclaration);
+                case self::TYPE_INT:
+                    return $platform->getIntegerTypeDeclarationSQL($fieldDeclaration);
+                case self::TYPE_BIGINT:
+                    return $platform->getBigIntTypeDeclarationSQL($fieldDeclaration);
                 default:
                     throw new \RuntimeException(sprintf('Field Type %s not supported', $fieldDeclaration['fieldType']));
             }
@@ -78,7 +78,7 @@ abstract class BitMaskType extends Type {
             return new $class(0);
         }
 
-        return new $class(intval($value));
+        return new $class((int)$value);
     }
 
     public function requiresSQLCommentHint(AbstractPlatform $platform) {
