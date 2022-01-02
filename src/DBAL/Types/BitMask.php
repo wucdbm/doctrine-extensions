@@ -38,7 +38,7 @@ abstract class BitMask {
      *
      * @return $this
      */
-    protected function set(int $bits): self {
+    protected function set(int $bits): static {
         $this->bits |= $bits;
 
         return $this;
@@ -49,7 +49,7 @@ abstract class BitMask {
      *
      * @return $this
      */
-    protected function unset(int $bits): self {
+    protected function unset(int $bits): static {
         $this->bits &= ~$bits;
 
         return $this;
@@ -60,13 +60,13 @@ abstract class BitMask {
      *
      * @return $this
      */
-    protected function toggle(int $bits): self {
+    protected function toggle(int $bits): static {
         $this->bits ^= $bits;
 
         return $this;
     }
 
-    protected function flip(int $bits, bool $setOrUnset): self {
+    protected function flip(int $bits, bool $setOrUnset): static {
         if ($setOrUnset) {
             $this->set($bits);
         } else {
@@ -79,7 +79,7 @@ abstract class BitMask {
     /**
      * @return $this
      */
-    protected function reset(): self {
+    protected function reset(): static {
         $this->bits = self::FLAG_NONE;
 
         return $this;
@@ -98,7 +98,7 @@ abstract class BitMask {
      *
      * @return $this
      */
-    public function setBits(int $bits): self {
+    public function setBits(int $bits): static {
         $this->bits = $bits;
 
         return $this;
