@@ -82,7 +82,7 @@ abstract class BitMaskType extends Type {
     }
 
     public function requiresSQLCommentHint(AbstractPlatform $platform) {
-        return false;
+        return true;
     }
 
     abstract protected function getValueClass(): string;
