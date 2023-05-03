@@ -14,6 +14,7 @@
 namespace Wucdbm\DoctrineExtensions\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\PhpIntegerMappingType;
 use Doctrine\DBAL\Types\Type;
 
 /**
@@ -25,7 +26,7 @@ use Doctrine\DBAL\Types\Type;
  *
  * Declare columns to be NOT NULL if possible. It makes SQL operations faster, by enabling better use of indexes and eliminating overhead for testing whether each value is NULL. You also save some storage space, one bit per column. If you really need NULL values in your tables, use them. Just avoid the default setting that allows NULL values in every column.
  */
-abstract class BitMaskType extends Type {
+abstract class BitMaskType extends Type implements PhpIntegerMappingType {
 
     // up to 65535
     const TYPE_SMALLINT = 'SMALLINT';
