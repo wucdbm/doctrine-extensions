@@ -13,6 +13,7 @@
 
 namespace Wucdbm\DoctrineExtensions\DBAL\Types;
 
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\PhpIntegerMappingType;
 use Doctrine\DBAL\Types\Type;
@@ -62,6 +63,11 @@ abstract class BitMaskType extends Type implements PhpIntegerMappingType {
         }
 
         return $platform->getSmallIntTypeDeclarationSQL($fieldDeclaration);
+    }
+
+    public function getBindingType()
+    {
+        return ParameterType::INTEGER;
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform) {
