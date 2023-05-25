@@ -49,7 +49,7 @@ class UTCDateType extends DateType {
         // Will be different and ->format() will yield wrong values
         $timezone = $value->getTimezone();
         $value->setTimezone($this->getUtc());
-        $string = $value->format($platform->getDateTimeFormatString());
+        $string = $value->format($platform->getDateFormatString());
         $value->setTimezone($timezone);
 
         return $string;
@@ -63,7 +63,7 @@ class UTCDateType extends DateType {
             return $value;
         }
 
-        $val = DateTime::createFromFormat($platform->getDateTimeFormatString(), $value, $this->getUtc());
+        $val = DateTime::createFromFormat($platform->getDateFormatString(), $value, $this->getUtc());
 
         if (!$val) {
             throw ConversionException::conversionFailed($value, $this->getName());
