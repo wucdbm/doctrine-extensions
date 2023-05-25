@@ -63,7 +63,7 @@ class UTCDateType extends DateType {
             return $value;
         }
 
-        $val = DateTime::createFromFormat($platform->getDateFormatString(), $value, $this->getUtc());
+        $val = DateTime::createFromFormat(sprintf('%s H:i:s', $platform->getDateFormatString()), sprintf('%s 00:00:00', $value), $this->getUtc());
 
         if (!$val) {
             throw ConversionException::conversionFailed($value, $this->getName());
