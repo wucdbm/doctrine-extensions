@@ -17,9 +17,9 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\DBAL\Types\DateTimeType;
+use Doctrine\DBAL\Types\DateType;
 
-class UTCDateTimeType extends DateTimeType {
+class UTCDateType extends DateType {
 
     /** @var DateTimeZone|null */
     private static $utc;
@@ -81,6 +81,6 @@ class UTCDateTimeType extends DateTimeType {
     }
 
     public function getName() {
-        return 'utc_datetime';
+        return 'utc_date';
     }
 }
