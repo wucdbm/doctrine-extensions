@@ -27,7 +27,7 @@ class UTCDateTimeType extends DateTimeType {
     /**
      * {@inheritdoc}
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform) {
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed {
         if (null === $value) {
             return $value;
         }
@@ -58,7 +58,8 @@ class UTCDateTimeType extends DateTimeType {
     /**
      * {@inheritdoc}
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform) {
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?DateTime
+    {
         if (null === $value || $value instanceof DateTime) {
             return $value;
         }
@@ -76,11 +77,13 @@ class UTCDateTimeType extends DateTimeType {
         return self::$utc ?: self::$utc = new DateTimeZone('UTC');
     }
 
-    public function requiresSQLCommentHint(AbstractPlatform $platform) {
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+    {
         return true;
     }
 
-    public function getName() {
+    public function getName(): string
+    {
         return 'utc_datetime';
     }
 }
