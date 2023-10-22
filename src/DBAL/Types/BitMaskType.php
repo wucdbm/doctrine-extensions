@@ -71,7 +71,7 @@ abstract class BitMaskType extends Type implements PhpIntegerMappingType {
         return ParameterType::INTEGER;
     }
 
-    public function convertToDatabaseValue($value, AbstractPlatform $platform) {
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): int {
         if ($value instanceof BitMask) {
             return $value->getBits();
         }
@@ -79,10 +79,11 @@ abstract class BitMaskType extends Type implements PhpIntegerMappingType {
         return 0;
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform) {
+    public function convertToPHPValue($value, AbstractPlatform $platform): mixed
+    {
         $class = $this->getValueClass();
 
-        if (null === $value || !is_numeric($value)) {
+        if (!is_numeric($value)) {
             return new $class(0);
         }
 
