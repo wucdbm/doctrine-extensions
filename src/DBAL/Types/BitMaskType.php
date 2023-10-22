@@ -36,7 +36,8 @@ abstract class BitMaskType extends Type implements PhpIntegerMappingType {
     // up to 2^64-1
     const TYPE_BIGINT = 'BIGINT';
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
         $this->validateValueClass();
         // Tip: To avoid Doctrine constantly re-generating your field definition, always add this
         // options={"unsigned"=true} to your field mapping
@@ -44,28 +45,28 @@ abstract class BitMaskType extends Type implements PhpIntegerMappingType {
         //  * @ORM\Column(name="some_field", type="your_field_name", options={"unsigned"=true})
         //  */
         // protected $someField;
-        $fieldDeclaration['unsigned'] = true;
-        $fieldDeclaration['notnull'] = true;
+        $column['unsigned'] = true;
+        $column['notnull'] = true;
         // $fieldDeclaration['default'] is not needed as we'd return 0 if no BitMask object @ field
         // $fieldDeclaration['default'] = 0;
 
-        if (isset($fieldDeclaration['fieldType'])) {
-            switch ($fieldDeclaration['fieldType']) {
+        if (isset($column['fieldType'])) {
+            switch ($column['fieldType']) {
                 case self::TYPE_SMALLINT:
-                    return $platform->getSmallIntTypeDeclarationSQL($fieldDeclaration);
+                    return $platform->getSmallIntTypeDeclarationSQL($column);
                 case self::TYPE_INT:
-                    return $platform->getIntegerTypeDeclarationSQL($fieldDeclaration);
+                    return $platform->getIntegerTypeDeclarationSQL($column);
                 case self::TYPE_BIGINT:
-                    return $platform->getBigIntTypeDeclarationSQL($fieldDeclaration);
+                    return $platform->getBigIntTypeDeclarationSQL($column);
                 default:
-                    throw new \RuntimeException(sprintf('Field Type %s not supported', $fieldDeclaration['fieldType']));
+                    throw new \RuntimeException(sprintf('Field Type %s not supported', $column['fieldType']));
             }
         }
 
-        return $platform->getSmallIntTypeDeclarationSQL($fieldDeclaration);
+        return $platform->getSmallIntTypeDeclarationSQL($column);
     }
 
-    public function getBindingType()
+    public function getBindingType(): int
     {
         return ParameterType::INTEGER;
     }
@@ -88,13 +89,15 @@ abstract class BitMaskType extends Type implements PhpIntegerMappingType {
         return new $class((int)$value);
     }
 
-    public function requiresSQLCommentHint(AbstractPlatform $platform) {
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+    {
         return true;
     }
 
     abstract protected function getValueClass(): string;
 
-    private function validateValueClass() {
+    private function validateValueClass(): void
+    {
         if (!is_subclass_of($this->getValueClass(), BitMask::class)) {
             throw new \RuntimeException(sprintf(
                 'Return value of %s::%s must be a subclass of %s',
